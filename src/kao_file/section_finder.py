@@ -42,7 +42,7 @@ class SectionFinder:
         if startingLine.isLastLine():
             return None
         
-        endingLine = startingLine.next()
+        endingLine = startingLine
         while not self.detector.isEnd(endingLine) and not endingLine.isLastLine():
             endingLine = endingLine.next()
         
