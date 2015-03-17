@@ -7,15 +7,17 @@ from kao_decorators import proxy_for
 class KaoFile:
     """ Represents a file """
     
-    def __init__(self, filename=None, lines=None):
+    @classmethod
+    def open(cls, filename):
+        """ Open the file as a Kao FIle """
+        lines = []
+        with open(filename, 'r') as file:
+            lines = [line.rstrip() for line in file.readlines()]
+        return cls(lines)
+    
+    def __init__(self, lines):
         """ Initialize the file """
-        if filename is not None:
-            with open(filename, 'r') as file:
-                self.lines = [line.rstrip() for line in file.readlines()]
-        elif lines is not None:
-            self.lines = lines
-        else:
-            raise TypeError("Either Filename or lines must be provided")
+        self.lines = lines
             
     def getLineAt(self, index):
         """ Return the File Line at the given index """
