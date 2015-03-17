@@ -23,9 +23,6 @@ class SectionFinder:
         endingLine = self.findEndingLine(startingLine)
         if endingLine is None:
             return endingLine
-            
-        if not self.requestedLineWithinFunction(currentLine, startingLine, endingLine):
-            return None
 
         return file.getSection(startingLine, endingLine)
             
@@ -47,7 +44,3 @@ class SectionFinder:
             endingLine = endingLine.next()
         
         return endingLine if self.detector.isEnd(endingLine) else None
-        
-    def requestedLineWithinFunction(self, currentLine, startingLine, endingLine):
-        """ Return if the current line is actually within the function """
-        return startingLine.lineIndex <= currentLine.lineIndex <= endingLine.lineIndex
