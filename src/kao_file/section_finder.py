@@ -2,10 +2,9 @@
 class SectionFinder:
     """ Represents a method of finding a function from the body of a file """
     
-    def __init__(self, startDetectorCls, endDetectorCls):
-        """ Initialize the Section Finder with the detectors to use for finding the start and end """
-        self.startDetectorCls = startDetectorCls
-        self.endDetectorCls = endDetectorCls
+    def __init__(self, sectionDetector):
+        """ Initialize the Section Finder with the detector to use for finding the start and end """
+        self.detector = sectionDetector
         
     def find(self, file, startAt=None):
         """ Returns the function lines that encapsulate the given line number or None """
@@ -33,11 +32,10 @@ class SectionFinder:
     def findStartingLine(self, currentLine):
         """ Returns the strating line of the function or None """
         startingLine = currentLine
-        startDetector = self.startDetectorCls()
-        while not startDetector.isStart(startingLine) and not startingLine.isFirstLine():
+        while not self.detector.isStart(startingLine) and not startingLine.isFirstLine():
             startingLine = startingLine.previous()
         
-        return startingLine if startDetector.isStart(startingLine) else None
+        return startingLine if self.detector.isStart(startingLine) else None
             
     def findEndingLine(self, startingLine):
         """ Returns the strating line of the function or None """
@@ -45,11 +43,10 @@ class SectionFinder:
             return None
         
         endingLine = startingLine.next()
-        endDetector = self.endDetectorCls(startingLine)
-        while not endDetector.isEnd(endingLine) and not endingLine.isLastLine():
+        while not self.detector.isEnd(endingLine) and not endingLine.isLastLine():
             endingLine = endingLine.next()
         
-        return endingLine if endDetector.isEnd(endingLine) else None
+        return endingLine if self.detector.isEnd(endingLine) else None
         
     def requestedLineWithinFunction(self, currentLine, startingLine, endingLine):
         """ Return if the current line is actually within the function """
