@@ -5,3 +5,7 @@ class SectionDetector:
     def isStart(self, line):
         """ Return if the given line is the start of a File Section """
         pass
+        
+    def isEnd(self, line):
+        """ Return if the given line is the end of a File Section """
+        pass
