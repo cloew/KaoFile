@@ -1,22 +1,25 @@
+from smart_defaults import ViaField
 
 class SectionFinder:
     """ Represents a method of finding a function from the body of a file """
+    DOWN = 0
+    UP = 1
     
     def __init__(self, sectionDetector):
         """ Initialize the Section Finder with the detector to use for finding the start and end """
         self.detector = sectionDetector
         
-    def find(self, file, startAt=None):
+    def find(self, file, startAt=None, direction=ViaField('DOWN')):
         """ Returns the function lines that encapsulate the given line number or None """
         if len(file) == 0:
             return None
            
         lineNumber = startAt
         if startAt is None:
-            lineNumber = len(file)-1
+            lineNumber = self.getStartValueFromDirection(direction, file)
             
         currentLine = file.getLineAt(lineNumber)
-        startingLine = self.findStartingLine(currentLine)
+        startingLine = self.findStartingLine(currentLine, direction)
         if startingLine is None:
             return None
             
@@ -25,12 +28,22 @@ class SectionFinder:
             return endingLine
 
         return file.getSection(startingLine, endingLine)
+        
+    def getStartValueFromDirection(self, direction, file):
+        """ Return the proper start value for the given direction """
+        if direction is self.DOWN:
+            return 0
+        else:
+            return len(file)-1
             
-    def findStartingLine(self, currentLine):
+    def findStartingLine(self, currentLine, direction):
         """ Returns the strating line of the function or None """
         startingLine = currentLine
         while not self.detector.isStart(startingLine) and not startingLine.isFirstLine():
-            startingLine = startingLine.previous()
+            if direction is self.DOWN:
+                startingLine = startingLine.next()
+            else:
+                startingLine = startingLine.previous()
         
         return startingLine if self.detector.isStart(startingLine) else None
             
