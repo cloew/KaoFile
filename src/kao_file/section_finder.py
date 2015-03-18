@@ -49,9 +49,6 @@ class SectionFinder:
             
     def findEndingLine(self, startingLine):
         """ Returns the strating line of the function or None """
-        if startingLine.isLastLine():
-            return None
-        
         endingLine = startingLine
         while not self.detector.isEnd(endingLine) and not endingLine.isLastLine():
             endingLine = endingLine.next()
