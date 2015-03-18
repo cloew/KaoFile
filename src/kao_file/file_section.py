@@ -10,3 +10,7 @@ class FileSection:
         self.startIndex = startingLineNumber
         self.endIndex = endingLineNumber
         self.lines = lines[self.startIndex: self.endIndex+1]
+        
+    def __repr__(self):
+        """ Return the string representation of this section """
+        return "<FileSection:{0}-{1}>".format(self.startIndex, self.endIndex)
