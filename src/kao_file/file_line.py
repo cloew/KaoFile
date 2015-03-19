@@ -1,6 +1,6 @@
 from kao_decorators import proxy_for
 
-@proxy_for('current', ['lstrip', 'strip', 'rstrip', '__contains__', '__len__', '__iter__', '__getitem__'])
+@proxy_for('current', ['startswith', 'lstrip', 'strip', 'rstrip', '__contains__', '__len__', '__iter__', '__getitem__'])
 class FileLine:
     """ Represents a line in a file """
     
