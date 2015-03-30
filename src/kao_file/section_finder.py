@@ -1,4 +1,4 @@
-from smart_defaults import ViaField
+from smart_defaults import smart_defaults, ViaField
 
 class SectionFinder:
     """ Represents a method of finding a function from the body of a file """
@@ -9,6 +9,7 @@ class SectionFinder:
         """ Initialize the Section Finder with the detector to use for finding the start and end """
         self.detector = sectionDetector
         
+    @smart_defaults
     def find(self, file, startAt=None, direction=ViaField('DOWN')):
         """ Returns the function lines that encapsulate the given line number or None """
         if len(file) == 0:
@@ -39,13 +40,22 @@ class SectionFinder:
     def findStartingLine(self, currentLine, direction):
         """ Returns the strating line of the function or None """
         startingLine = currentLine
-        while not self.detector.isStart(startingLine) and not startingLine.isFirstLine():
+        while not self.detector.isStart(startingLine) and not self.checkAtEdgeOfFile(startingLine, direction):
             if direction is self.DOWN:
                 startingLine = startingLine.next()
             else:
                 startingLine = startingLine.previous()
         
         return startingLine if self.detector.isStart(startingLine) else None
+        
+    def checkAtEdgeOfFile(self, line, direction):
+        """ Check if the given line is at the edge for the given search direction """
+        atEdge = None
+        if direction is self.DOWN:
+            atEdge = line.isLastLine()
+        else:
+            atEdge = line.isFirstLine()
+        return atEdge
             
     def findEndingLine(self, startingLine):
         """ Returns the strating line of the function or None """
